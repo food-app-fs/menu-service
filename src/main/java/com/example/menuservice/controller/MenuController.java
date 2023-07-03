@@ -8,6 +8,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 
@@ -39,6 +41,26 @@ public class MenuController {
         log.info("SEARCH BY contain: " + s);
         return service.getBySearchContain(s);
 
+    }
+
+    @PostMapping("/search/menu-id")
+    public List<String> provideMenuNameAsPerID(
+            @RequestBody List<Long> data
+            ){
+
+
+        List<String> names = new ArrayList<>();
+        List<Menu> menuList = repository.findAll();
+
+        for(int i = 0 ; i < data.size(); i++){
+            for(Menu menu: menuList){
+                if(data.get(i).equals(menu.getProductId())){
+                    names.add(menu.getName());
+                }
+            }
+        }
+
+        return names;
 
     }
 }
